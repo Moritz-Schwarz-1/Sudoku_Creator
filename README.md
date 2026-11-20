@@ -1,7 +1,7 @@
 # Sudoku_Creator
 ## About
 This is a small project to sharpen my C skills. 
-The program will create a number of sudokus specified by the user and store it in sudokus.txt in the same ways as in examples.txt.
+The program will create a number of sudokus specified by the user and store it in `sudokus.txt` in the same ways as in `examples.txt`.
 The Algorithm will always try to remove all 81 numbers from a sudoku - refilling the hole if uniqueness is lost - to make the puzzles as challenging as possible.
 
 ## Getting started
