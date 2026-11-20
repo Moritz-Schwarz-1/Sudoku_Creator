@@ -29,6 +29,21 @@ int main(void) {
     srand(time(NULL));
 
     FILE* fp;
+    fp = fopen("sudokus.txt","r");
+    //fclose(fp);
+
+    if (fp != NULL) {
+        char ch;
+        printf("sudokus.txt already exists in this directory. Overwrite it [y/n]?");
+        do
+            ch = getchar();
+        while (ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N');
+
+        if (ch == 'n' || ch == 'N') {
+            return 1;
+        }
+    }
+
     fp = fopen("sudokus.txt","w");
 
     if (fp == NULL) {
@@ -285,8 +300,6 @@ int *create_sudoku(int difficulty){
                 difficulty++;*/
         }
     }
-    //printf("\n Succeded in creating a sudoku with %d holes ",difficulty);
-    //printf("Created %d holes ",difficulty - failed_holes);
     holes_created = difficulty - failed_holes;
     return sudoku;
 }
