@@ -1,0 +1,19 @@
+#IDE 
+.idea/
+
+
+#CMake
+cmake-build-debug/
+CMakeLists.txt
+
+
+#Compiled Binaries and Programs
+sudoku0
+sudoku1
+sudoku2
+sudoku3
+.o
+
+
+#.txt files for developing
+optimierungen*
