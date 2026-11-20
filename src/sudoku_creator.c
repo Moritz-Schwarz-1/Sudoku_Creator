@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define Sudokus_Amount 100
 
 int solve_sudoku(int sudoku[81], int square_index);
 
@@ -51,6 +50,10 @@ int main(void) {
         return 1;
     }
 
+    unsigned int sudokus_amount = 1;
+
+    printf("\nHow many Sudokus should be created: ");
+    scanf("%d",&sudokus_amount);
 
     int* sudoku;
     int sudokus_per_holes[81]= {0};
@@ -58,8 +61,8 @@ int main(void) {
         failed_hole_numbers[55] = 0;
         clock_t start = clock();
 
-        for (int i = 1; i <= Sudokus_Amount; i++) {
-            printf(" %d / %d\n",i,Sudokus_Amount);
+        for (int i = 1; i <= sudokus_amount; i++) {
+            printf(" %d / %d\n",i,sudokus_amount);
             sudoku = create_sudoku(81);
 
             if (sudoku == NULL) {
@@ -86,7 +89,7 @@ int main(void) {
         }
 
         printf("\nAnd took %lf seconds", ((double)clock() - start) / CLOCKS_PER_SEC);
-        printf("\n= %lf seconds per created sudoku\n", ((double)clock() - start) / (Sudokus_Amount * CLOCKS_PER_SEC));
+        printf("\n= %lf seconds per created sudoku\n", ((double)clock() - start) / (sudokus_amount * CLOCKS_PER_SEC));
 
     fclose(fp);
     return 0;

@@ -12,8 +12,8 @@ sudoku0
 sudoku1
 sudoku2
 sudoku3
-.o
-
+*.o
+sudoku_creator
 
 #.txt files for developing
 optimierungen*
