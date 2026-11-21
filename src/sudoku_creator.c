@@ -9,7 +9,6 @@ int solve_sudoku_randomly(int sudoku[81], int square_index);
 
 int count_solutions(int sudoku[81], int square_index);
 
-
 int validate(int sudoku[], int square_index);
 
 void print_sudoku(int sudoku[81]);
@@ -96,7 +95,6 @@ int main(void) {
 }
 
 
-
 int solve_sudoku(int sudoku[81], int square_index) {
 
     if (square_index == 81) {
@@ -127,6 +125,7 @@ int solve_sudoku(int sudoku[81], int square_index) {
 
     return 1;
 }
+
 
 int count_solutions(int sudoku[81], int square_index) { //TODO: find better order for holes to be checked
 
@@ -160,6 +159,7 @@ int count_solutions(int sudoku[81], int square_index) { //TODO: find better orde
 
     return solutions_count;
 }
+
 
 int solve_sudoku_randomly(int sudoku[81], int square_index) {
 
@@ -203,6 +203,7 @@ int solve_sudoku_randomly(int sudoku[81], int square_index) {
     return 1;
 }
 
+
 int validate(int sudoku[], int square_index) {
 
     int x = square_index % 9;
@@ -234,6 +235,7 @@ int validate(int sudoku[], int square_index) {
     return 0;
 }
 
+
 void print_sudoku(int sudoku[81]) {
 
     printf("\n");
@@ -253,12 +255,14 @@ void print_sudoku(int sudoku[81]) {
     }
 }
 
+
 void print_sudoku_oneline(int sudoku[81]) {
 
     for (int i = 0; i < 81; i++) {
         printf("%d",sudoku[i]);
     }
 }
+
 
 int *create_sudoku(int difficulty){
 
