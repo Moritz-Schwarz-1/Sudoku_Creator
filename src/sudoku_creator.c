@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 int solve_sudoku(int sudoku[81], int square_index);
 
 int solve_sudoku_randomly(int sudoku[81], int square_index);
