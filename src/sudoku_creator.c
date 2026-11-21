@@ -41,7 +41,7 @@ int main(void) {
         }
     }
 
-    fp = fopen("sudokus.txt","w");
+    fp = fopen("sudokus.txt","a");
 
     if (fp == NULL) {
         printf("Error opening sudokus.txt\n");
@@ -50,7 +50,7 @@ int main(void) {
 
     unsigned int sudokus_amount = 1;
 
-    printf("\nHow many Sudokus should be created: ");
+    printf("\nHow many Sudokus should be created?: ");
     scanf("%d",&sudokus_amount);
 
     int* sudoku;
