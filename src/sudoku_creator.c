@@ -23,7 +23,6 @@ int holes_created = 0;
 
 int main(void) {
 
-
     srand(time(NULL));
 
     FILE* fp;

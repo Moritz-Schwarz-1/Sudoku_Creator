@@ -1,5 +1,5 @@
 sudoku_creator: src/sudoku_creator.o
-	gcc src/sudoku_creator.o -o sudoku_creator -O2
+	gcc src/sudoku_creator.o -o sudoku_creator -O3
 
 src/sudoku_creator.o: src/sudoku_creator.c
 	gcc src/sudoku_creator.c -c -o src/sudoku_creator.o
