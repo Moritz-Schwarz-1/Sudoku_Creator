@@ -23,6 +23,7 @@ int holes_created = 0;
 
 int main(void) {
 
+
     srand(time(NULL));
 
     FILE* fp;
@@ -51,7 +52,10 @@ int main(void) {
     unsigned int sudokus_amount = 1;
 
     printf("\nHow many Sudokus should be created?: ");
-    scanf("%d",&sudokus_amount);
+    while (scanf("%d",&sudokus_amount) == 0) {
+        printf("Invalid input! Please Enter a valid Number: ");
+        while (getchar() != '\n');  //Flushing buffer
+    }
 
     int* sudoku;
     int sudokus_per_holes[81]= {0};
