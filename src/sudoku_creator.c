@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define PROGRESSBAR_WIDTH 25 // Amount of characters printed in a progressbar
+
 int solve_sudoku(int sudoku[81], int square_index);
 
 int solve_sudoku_randomly(int sudoku[81], int square_index);
@@ -63,14 +65,27 @@ int main(void) {
         clock_t start = clock();
 
         for (int i = 1; i <= sudokus_amount; i++) {
-            printf(" %d / %d\n",i,sudokus_amount);
+
+            printf("\r[");
+            int progress_bar_elements = (float) i / sudokus_amount * PROGRESSBAR_WIDTH;
+            int k;
+            for (k = 0; k < progress_bar_elements; k++) {
+
+                printf("=");
+            }
+            for (; k < PROGRESSBAR_WIDTH; k++) {
+                printf(" ");
+            }
+            printf("]");
+            printf(" [ %.2f%% ]",  i * 100.0f / sudokus_amount  );
+            fflush(stdout);
+
             sudoku = create_sudoku(81);
 
             if (sudoku == NULL) {
-                printf("Error allocating memory for a sudoku\n");
+                printf("\nError allocating memory for a sudoku\n");
                 return 2;
             }
-
             for (int j = 0; j < 81; j++) {
                 fprintf(fp,"%d",sudoku[j]);
             }
@@ -81,7 +96,7 @@ int main(void) {
             holes_created = 0;
         }
 
-        printf("Results:\n");
+        printf("\n\nResults:\n");
         for (int i = 0; i < 81; i++) {
 
             if (sudokus_per_holes[i] != 0) {
