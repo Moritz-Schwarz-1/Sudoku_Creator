@@ -16,8 +16,6 @@ void print_sudoku(int sudoku[81]);
 
 void print_sudoku_oneline(int sudoku[81]);
 
-void sprinkle_numbers(int sudoku[81], int amount);
-
 int *create_sudoku(int difficulty);
 
 int failed_hole_numbers[81] = {0}; //TODO Make nicer
@@ -33,7 +31,7 @@ int main(void) {
 
     if (fp != NULL) {
         char ch;
-        printf("sudokus.txt already exists in this directory. Overwrite it [y/n]?");
+        printf("sudokus.txt already exists in this directory. The creator will write content into this file. Is this ok? [y/n]?");
         do
             ch = getchar();
         while (ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N');
@@ -248,7 +246,6 @@ int validate(int sudoku[], int square_index) {
             }
         }
     }
-
     return 0;
 }
 
@@ -267,8 +264,6 @@ void print_sudoku(int sudoku[81]) {
 
         }
         printf("\n");
-
-
     }
 }
 
