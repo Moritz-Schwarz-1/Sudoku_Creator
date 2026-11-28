@@ -125,6 +125,10 @@ int main(int argc, char *argv[]) {
             printf("\nERROR: sudokus.txt already exists. use \"--append\" or \"--replace\" to specify what to do!\n");
             return 3;
         }
+
+        if (fp == NULL && conflicts[0] == 0) {
+            fp = fopen("sudokus.txt","w");
+        }
     }
 
 
@@ -141,6 +145,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        fclose(fp);
         fp = fopen("sudokus.txt","a");
 
         if (fp == NULL) {
