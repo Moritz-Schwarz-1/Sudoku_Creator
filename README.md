@@ -14,7 +14,7 @@ The Algorithm will always try to remove all 81 numbers from a sudoku - refilling
 The Program pastes each sodoku into a single line followed by the amount of empty cells in the corresponding puzzle after a #. The puzzles are converted row by row into the single line. 
 
 ## Command line arguments
-Use the flag --help or -h for help
+Use the flag `--help` or `-h` for help
 
 ## Requirements
 
