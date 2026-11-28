@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define PROGRESSBAR_WIDTH 25 // Amount of characters printed in a progressbar
 
@@ -21,41 +22,140 @@ int *create_sudoku(int difficulty);
 int failed_hole_numbers[81] = {0}; //TODO Make nicer
 int holes_created = 0;
 
-int main(void) {
-
-    srand(time(NULL));
+int main(int argc, char *argv[]) {
 
     FILE* fp;
     fp = fopen("sudokus.txt","r");
-    //fclose(fp);
+    unsigned int sudokus_amount = 50;
+    unsigned int difficulty = 81;
+    int numbering = 1; // determines whether #XX follows sudokus
 
-    if (fp != NULL) {
-        char ch;
-        printf("sudokus.txt already exists in this directory. The creator will write content into this file. Is this ok? [y/n]?");
-        do
-            ch = getchar();
-        while (ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N');
+    if (argc > 1) {
+        int conflicts[3] = {}; // Keep track of conflicting arguments
 
-        if (ch == 'n' || ch == 'N') {
-            return 1;
+        for (int arguments = 1; arguments < argc; arguments++) {
+            //printf(">%s<",argv[arguments]);
+
+
+            // Reading argv[]
+
+            if (!strcmp( argv[arguments], "--append" ) ) {
+                fp = fopen("sudokus.txt","a");
+                conflicts[0]++;
+            }
+
+            else if (!strcmp( argv[arguments], "--replace")) {
+                fp = fopen("sudokus.txt","w");
+                conflicts[0]++;
+            }
+
+            else if (!strcmp( argv[arguments], "--help") || !strcmp( argv[arguments], "-h")) {
+                printf("\nSyntax: ./sudoku_creator [Flags,...]\n"
+                       "\nFlags:\n"
+                       "if sudokus.txt already exists, specify ONE of:\n"
+                       "--append : append sudokus.txt.\n"
+                       "--replace : delete contents of sudokus.txt.\n"
+                       "\n"
+                       "--set-max-diff [VALUE] : sets how many numbers the creator tries to remove. Accepts nonnegative integers and truncates them to 81 if too big. (Standard: 81)\n"
+                       "--set-amount [VALUE] : sets how many sudokus should be created. Accepts nonnegative integers. (Standard: 50)\n"
+                       "\n"
+                       "--no-numbering : Disables the #XX after the sudokus in sudokus.txt, which stores the difficulty of a sudoku.\n"
+                       "\n"
+                       "--help or -h : prints all Flags\n"
+                       "");
+                return 0;
+            }
+
+            else if (!strcmp( argv[arguments], "--set-max-diff") ) {
+                if (++arguments > argc) {
+                    printf("ERROR: \"--set-max-diff didnt get a parameter\"\n");
+                    return 3;
+                }
+                conflicts[1]++;
+
+                difficulty = atoi(argv[arguments]);
+                if (difficulty > 81) {
+                    printf("WARNING: got difficulty > 81, truncating it down to 81\n");
+                    difficulty = 81;
+                }
+                if (difficulty == 0)
+                    printf("WARNING: got difficulty == 0, if this is not wanted, specify a parameter!\n");
+            }
+
+            else if (!strcmp( argv[arguments], "--set-amount") ) {
+                if (++arguments > argc) {
+                    printf("ERROR: \"--set-amount didnt get a parameter\"\n");
+                    return 3;
+                }
+                conflicts[2]++;
+
+                sudokus_amount = atoi(argv[arguments]);
+                if (sudokus_amount == 0) {
+                    printf("ERROR: got invalid value for \"--set-amount\"\n");
+                    return 3;
+                }
+            }
+
+            else if (!strcmp( argv[arguments], "--no-numbering")) {
+                numbering = 0;
+            }
+
+            else {
+                printf("ERROR: unknown argument: %s\n", argv[arguments]);
+                return 3;
+            }
+        }
+
+        // Check if conflict
+
+        if (conflicts[0] > 1) {
+            printf("ERROR: got contradicting arguments \"--replace\" and \"--append\"\n");
+            return 3;
+        }
+        if (conflicts[1] > 1) {
+            printf("ERROR: got contradicting parameters for \"--set-max-diff\"\n");
+            return 3;
+        }
+        if (conflicts[2] > 1) {
+            printf("ERROR: got contradicting parameters for \"-set-amount\"\n");
+            return 3;
+        }
+
+        if (fp != NULL && conflicts[0] == 0) {
+            printf("\nERROR: sudokus.txt already exists. use \"--append\" or \"--replace\" to specify what to do!\n");
+            return 3;
         }
     }
 
-    fp = fopen("sudokus.txt","a");
 
-    if (fp == NULL) {
-        printf("Error opening sudokus.txt\n");
-        return 1;
+    else {
+        if (fp != NULL) {
+            char ch;
+            printf("sudokus.txt already exists in this directory. The creator will write content into this file. Is this ok? [y/n]? ");
+            do
+                ch = getchar();
+            while (ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N');
+
+            if (ch == 'n' || ch == 'N') {
+                return 1;
+            }
+        }
+
+        fp = fopen("sudokus.txt","a");
+
+        if (fp == NULL) {
+            printf("Error opening sudokus.txt\n");
+            return 1;
+        }
+
+        printf("\nHow many Sudokus should be created?: ");
+        while (scanf("%d",&sudokus_amount) == 0) {
+            printf("Invalid input! Please Enter a valid Number: ");
+            while (getchar() != '\n');  //Flushing buffer
+        }
     }
 
-    unsigned int sudokus_amount = 1;
-
-    printf("\nHow many Sudokus should be created?: ");
-    while (scanf("%d",&sudokus_amount) == 0) {
-        printf("Invalid input! Please Enter a valid Number: ");
-        while (getchar() != '\n');  //Flushing buffer
-    }
-
+    srand(time(NULL));
     int* sudoku;
     int sudokus_per_holes[81]= {0};
 
@@ -78,7 +178,7 @@ int main(void) {
             printf(" [ %.2f%% ]",  i * 100.0f / sudokus_amount  );
             fflush(stdout);
 
-            sudoku = create_sudoku(81);
+            sudoku = create_sudoku(difficulty);
 
             if (sudoku == NULL) {
                 printf("\nError allocating memory for a sudoku\n");
@@ -87,14 +187,17 @@ int main(void) {
             for (int j = 0; j < 81; j++) {
                 fprintf(fp,"%d",sudoku[j]);
             }
-            fprintf(fp," #%d\n",holes_created);
+            if (numbering == 1) {
+                fprintf(fp," #%d",holes_created);
+            }
+            fprintf(fp,"\n");
             free(sudoku);
 
             sudokus_per_holes[holes_created]++;
             holes_created = 0;
         }
 
-        printf("\n\nResults:\n");
+        printf("\n\nGenerated %d sudokus, Results:\n\n",sudokus_amount);
         for (int i = 0; i < 81; i++) {
 
             if (sudokus_per_holes[i] != 0) {
@@ -297,7 +400,6 @@ int *create_sudoku(int difficulty){
     if (sudoku == NULL) {
         return NULL;
     }
-
 
     for (int i = 0; i < 81; i++) {
         sudoku[i] = 0;
